@@ -19,7 +19,7 @@ while (x < 800):
             bottom=0
             delay(0.5)
     x += 5
-    delay(0.05)
+    delay(0.1)
     get_events()
 
 
