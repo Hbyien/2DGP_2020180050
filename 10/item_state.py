@@ -34,11 +34,11 @@ def handle_events():
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
-        elif event.key == SDLK_i:
-            game_framework.pop_state()
         elif event.type == SDL_KEYDOWN:
             match event.key:
                 case pico2d.SDLK_ESCAPE:
+                    game_framework.pop_state()
+                case pico2d.SDLK_i:
                     game_framework.pop_state()
                 case pico2d.SDLK_0:
                     play_state.boy.item = None

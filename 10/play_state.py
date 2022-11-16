@@ -1,9 +1,13 @@
 from pico2d import *
+import random
 import game_framework
 import logo_state
 import title_state
 import item_state
 import add_delete_boy
+
+team = None
+grass = None
 
 class Grass:
     def __init__(self):
@@ -14,14 +18,14 @@ class Grass:
 
 class Boy:
     def __init__(self):
-        self.x, self.y = 0, 90
+        self.x, self.y = random.randint(0, 800), 90
         self.frame = 0
-        self.dir =1
+        self.dir = 1
         self.image = load_image('animation_sheet.png')
         self.item = None
         self.ball_image = load_image('ball21x21.png')
         self.big_ball_image = load_image('ball41x41.png')
-        
+
 
     def update(self):
         self.frame = (self.frame + 1) % 8
@@ -31,7 +35,7 @@ class Boy:
             self.dir = -1
         elif self.x < 0:
             self.x=0
-            self.dir=1
+            self.dir = 1
 
     def draw(self):
         if self.dir ==1:
@@ -42,10 +46,10 @@ class Boy:
             self.ball_image.draw(self.x+10,self.y+50)
         elif self.item == 'Bigball':
             self.big_ball_image.draw(self.x + 10, self.y + 50)
-
+        delay(0.001)
 
 def handle_events():
-    global running
+    #global running
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -59,27 +63,29 @@ def handle_events():
             elif event.key == SDLK_b:
                 game_framework.push_state(add_delete_boy)
 
-boy = None #c언어 null
-grass = None
-running = True
+def add_boy(count):
+    global team
+    team = [Boy() for i in range(count)]
+
 
 
 #초기화
 def enter():
-    global boy, grass, running
-    boy = Boy()
+    global boy, grass, running, team
+    team = [Boy() for i in range(1)]
     grass = Grass()
-    running = True
+
 
 #종료
 def exit():
-    global boy, grass
-    del boy
+    global boy, grass,team
+    del team
     del grass
 
 # 월드에 존재하는 객체들을 업데이트
 def update():
-    boy.update()
+    for boy in team:
+        boy.update()
     # grass는 움직이지 않기에 업데이트가 필요없기에 생략
 
 #월드를 그린다.
@@ -91,7 +97,8 @@ def draw():
 
 def draw_world():
     grass.draw()
-    boy.draw()
+    for boy in team:
+        boy.draw()
 
 
 def pause():

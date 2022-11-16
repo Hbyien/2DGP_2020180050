@@ -3,9 +3,11 @@ import game_framework
 import play_state
 import title_state
 
+
 # fill here
 # running = True
 image = None
+count = 1
 
 
 def enter():
@@ -30,17 +32,27 @@ def draw():
     pass
 
 def handle_events():
+    global count
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
-        elif event.key == SDLK_b:
-            game_framework.pop_state()
         elif event.type == SDL_KEYDOWN:
             match event.key:
                 case pico2d.SDLK_ESCAPE:
                     game_framework.pop_state()
-
+                case pico2d.SDLK_b:
+                    game_framework.pop_state()
+                case pico2d.SDLK_k:
+                    if count ==1:
+                        game_framework.pop_state()
+                        pass
+                    count -=1
+                    play_state.add_boy(count)
+                case pico2d.SDLK_j:
+                    count += 1
+                    play_state.add_boy(count)
+                    game_framework.pop_state()
 
 
 
